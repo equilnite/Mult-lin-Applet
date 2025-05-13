@@ -1,0 +1,76 @@
+body {
+    font-family: sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-section,
+.chart-section,
+.options-section,
+.coefficients-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+h2 {
+    color: #333;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+textarea,
+input[type="text"],
+input[type="number"],
+input[type="range"] {
+    width: calc(100% - 12px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #5cb85c;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+.chart-section {
+    /* Remove fixed dimensions, will be sized by content */
+    overflow: auto; /* Ensure scroll if content overflows */
+    border: 1px solid #ddd; /* Add a border to visually see the container */
+    border-radius: 5px;
+    padding: 10px; /* Add some padding inside the container */
+}
+
+#myChart {
+    /* Let JavaScript control the canvas dimensions */
+}
+
+#coefficientsDisplay {
+    margin-top: 10px;
+}

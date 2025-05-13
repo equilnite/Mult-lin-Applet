@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorical Regression and Scatter Plot</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Categorical Regression and Scatter Plot</h1>
+
+        <div class="input-section">
+            <h2>Data Input</h2>
+            <label for="quantitativeX">Quantitative Explanatory Variable (separate by comma, space, or newline):</label>
+            <textarea id="quantitativeX"></textarea><br><br>
+
+            <label for="quantitativeY">Quantitative Response Variable (separate by comma, space, or newline):</label>
+            <textarea id="quantitativeY"></textarea><br><br>
+
+            <label for="categoricalZ">Categorical Explanatory Variable (separate by comma, space, or newline):</label>
+            <textarea id="categoricalZ"></textarea><br><br>
+
+            <button onclick="processData()">Process Data and Generate Plot</button>
+        </div>
+
+        <div class="chart-section">
+            <h2>Scatter Plot with Regression Lines</h2>
+            <canvas id="myChart" width="600" height="400"></canvas>
+        </div>
+
+        <div class="options-section">
+            <h2>Graph Options</h2>
+            <label for="graphTitle">Graph Title:</label>
+            <input type="text" id="graphTitle" value="Scatter Plot with Regression Lines"><br><br>
+
+            <label for="xAxisLabel">X-axis Label:</label>
+            <input type="text" id="xAxisLabel" value="Explanatory Variable"><br><br>
+
+            <label for="yAxisLabel">Y-axis Label:</label>
+            <input type="text" id="yAxisLabel" value="Response Variable"><br><br>
+
+            <label for="xStepSize">X-axis Grid Step Size (please specify):</label>
+            <input type="number" id="xStepSize"><br><br>
+
+            <label for="yStepSize">Y-axis Grid Step Size (please specify):</label>
+            <input type="number" id="yStepSize"><br><br>
+
+            <label for="jitterAmount">Jitter Amount (this artifically creates random noise to make it clear that there are overlapping points ):</label>
+            <input type="number" id="jitterAmount" value="0" step="0.1"><br><br>
+
+            <label for="pointOpacity">Point Opacity (to further help with overlapping points):</label>
+            <input type="range" id="pointOpacity" min="0.1" max="1" value="1" step="0.1"><br><br>
+
+            <button onclick="updateChartOptions()">Update Chart (give it some time to do it!)</button>
+        </div>
+
+        <div class="coefficients-section">
+            <h2>Regression Coefficients</h2>
+            <div id="coefficientsDisplay"></div>
+        </div>
+    </div>
+</body>
+</html>
