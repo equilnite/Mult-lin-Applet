@@ -60,6 +60,8 @@ function processData() {
         datasets.push({
             label: category,
             data: xByCategory.map((x, i) => ({
+                originalX: x, // Store the original x value
+                originalY: yByCategory[i], // Store the original y value
                 x: x + (Math.random() - 0.5) * jitterAmount,
                 y: yByCategory[i] + (Math.random() - 0.5) * jitterAmount
             })),
@@ -92,7 +94,18 @@ function processData() {
     });
 
     displayCoefficients(coefficients);
-    renderChart(datasets);
+    if (!myChart) {
+        renderChart(datasets);
+    } else {
+        updateChartData(datasets);
+    }
+}
+
+function updateChartData(newDatasets) {
+    if (myChart) {
+        myChart.data.datasets = newDatasets;
+        myChart.update();
+    }
 }
 
 function renderChart(datasets) {
@@ -102,10 +115,6 @@ function renderChart(datasets) {
     const yAxisLabel = document.getElementById('yAxisLabel').value;
     const xStep = parseFloat(document.getElementById('xStepSize').value);
     const yStep = parseFloat(document.getElementById('yStepSize').value);
-
-    if (myChart) {
-        myChart.destroy();
-    }
 
     myChart = new Chart(ctx, {
         type: 'scatter',
@@ -129,7 +138,9 @@ function renderChart(datasets) {
                         label: function(context) {
                             let label = context.dataset.label || '';
                             if (context.parsed && context.parsed.x !== null && context.parsed.y !== null && !label.includes('Regression')) {
-                                label += ` (x:${context.parsed.x}, y:${context.parsed.y})`;
+                                const originalX = context.dataset.data[context.dataIndex].originalX;
+                                const originalY = context.dataset.data[context.dataIndex].originalY;
+                                label += ` (x:${originalX}, y:${originalY})`;
                             }
                             return label;
                         }
@@ -161,7 +172,9 @@ function renderChart(datasets) {
                         display: !isNaN(yStep)
                     }
                 }
-            }
+            },
+            responsive: false,
+            maintainAspectRatio: false
         }
     });
 }
@@ -173,10 +186,22 @@ function updateChartOptions() {
 
         myChart.data.datasets.forEach(dataset => {
             if (!dataset.label.includes('Regression')) {
-                dataset.data = dataset.data.map(point => ({
-                    x: point.x + (Math.random() - 0.5) * jitterAmount,
-                    y: point.y + (Math.random() - 0.5) * jitterAmount
-                }));
+                dataset.data.forEach((point, index) => {
+                    if (dataset._original && dataset._original[index]) {
+                        const originalX = dataset._original[index].x;
+                        const originalY = dataset._original[index].y;
+                        point.originalX = originalX; // Ensure originalX is still stored
+                        point.originalY = originalY; // Ensure originalY is still stored
+                        point.x = originalX + (Math.random() - 0.5) * jitterAmount;
+                        point.y = originalY + (Math.random() - 0.5) * jitterAmount;
+                    } else {
+                        // Fallback if _original is missing or doesn't have the index
+                        point.x = point.x + (Math.random() - 0.5) * jitterAmount;
+                        point.y = point.y + (Math.random() - 0.5) * jitterAmount;
+                        point.originalX = point.x;
+                        point.originalY = point.y;
+                    }
+                });
                 const colorBase = dataset.borderColor;
                 dataset.backgroundColor = colorBase + Math.round(pointOpacity * 255).toString(16).padStart(2, '0');
             }
@@ -187,14 +212,14 @@ function updateChartOptions() {
         myChart.options.scales.y.title.text = document.getElementById('yAxisLabel').value;
 
         const xStep = parseFloat(document.getElementById('xStepSize').value);
-        const yStep = parseFloat(documentgetElementById('yStepSize').value);
+        const yStep = parseFloat(document.getElementById('yStepSize').value);
 
         myChart.options.scales.x.ticks.stepSize = isNaN(xStep) ? undefined : xStep;
         myChart.options.scales.y.ticks.stepSize = isNaN(yStep) ? undefined : yStep;
         myChart.options.scales.x.grid.display = !isNaN(xStep);
         myChart.options.scales.y.grid.display = !isNaN(yStep);
 
-        myChart.update(); // Trigger a redraw with new options
+        myChart.update(); // Trigger an update, not a full re-render
     }
 }
 
@@ -214,17 +239,5 @@ function displayCoefficients(coefficients) {
 
 // Function to trigger initial data processing and chart rendering on load (optional)
 // window.onload = function() {
-//     // You might want to load with some default data or an empty chart initially
-//     // For now, let's just ensure the grid is potentially set up if step sizes are default 1
-//     const initialXStep = parseFloat(document.getElementById('xStepSize').value);
-//     const initialYStep = parseFloat(document.getElementById('yStepSize').value);
-
-//     const defaultXStep = parseFloat(document.getElementById('xStepSize').defaultValue);
-//     const defaultYStep = parseFloat(document.getElementById('yStepSize').defaultValue);
-
-//     if (myChart) {
-//         myChart.options.scales.x.grid.display = !isNaN(initialXStep) || !isNaN(defaultXStep);
-//         myChart.options.scales.y.grid.display = !isNaN(initialYStep) || !isNaN(defaultYStep);
-//         myChart.update();
-//     }
+//     // ... (rest of your window.onload function - no changes needed) ...
 // };

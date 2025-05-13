@@ -5,12 +5,13 @@ body {
 }
 
 .container {
-    max-width: 960px;
-    margin: 0 auto;
+    min-width: 780px; /* Minimum width to accommodate the canvas and padding */
+    margin: 20px auto; /* Center the container */
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .input-section,
@@ -60,15 +61,23 @@ button:hover {
 }
 
 .chart-section {
-    /* Remove fixed dimensions, will be sized by content */
-    overflow: auto; /* Ensure scroll if content overflows */
-    border: 1px solid #ddd; /* Add a border to visually see the container */
+    min-width: 750px; /* Minimum width for the chart section */
+    min-height: 750px; /* Minimum height for the chart section */
+    margin: 10px auto; /* Center the chart section */
+    overflow: auto; /* Allow scrolling if content exceeds these minimums */
+    border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 10px; /* Add some padding inside the container */
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #myChart {
-    /* Let JavaScript control the canvas dimensions */
+    width: 80%; /* Make the canvas try to fill its parent's width */
+    height: 80%; /* Make the canvas try to fill its parent's height */
+    display: block;
 }
 
 #coefficientsDisplay {
